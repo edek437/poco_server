@@ -4,12 +4,24 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../Get_command.cpp \
+../Handler.cpp \
+../Nick.cpp \
+../Who.cpp \
 ../poco_server_framework.cpp 
 
 OBJS += \
+./Get_command.o \
+./Handler.o \
+./Nick.o \
+./Who.o \
 ./poco_server_framework.o 
 
 CPP_DEPS += \
+./Get_command.d \
+./Handler.d \
+./Nick.d \
+./Who.d \
 ./poco_server_framework.d 
 
 
