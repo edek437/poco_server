@@ -54,11 +54,12 @@ public:
 			buffer[rec] = '\0';
 			std::cout << "Received: " << buffer << std::endl;
 			Handler *h = handler_factory(buffer, socket());
+			Poco::SharedPtr<Handler> phandler(h);
 			if (h)
 //TODO: add mutex as handle parameter
 				h->handle(database, db_rwlock);
 			else { //when it's done only way to get inside else is by sending quit request from client
-				std::cout << "Sorry not implemented yet" << std::endl;
+				std::cout << "Ending connection" << std::endl;
 				break;
 			}
 		}
@@ -67,6 +68,11 @@ public:
 
 	~MyTCPServerConnection() {
 		std::cout << "deleting from connected users database"<<std::endl;
+		for(std::map<std::string,Poco::Net::SocketAddress>::iterator mit=database.begin();mit!=database.end();mit++){
+			if(mit->second.toString()==socket().peerAddress().toString()){
+				database.erase(mit);
+			}
+		}
 		std::cout << "ending connection" << std::endl;
 	}
 };

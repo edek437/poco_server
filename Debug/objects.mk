@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lPocoNet -lPocoUtil -lPocoFoundation
+LIBS := -lPocoNet -lboost_regex -lPocoUtil -lPocoFoundation
 

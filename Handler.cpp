@@ -21,6 +21,7 @@ std::string Handler::database_to_string(dbmap& database,Poco::RWLock& rwl){
 	return ss.str();
 }
 
+//used in not implemented yet message function
 const Poco::Net::SocketAddress Handler::find_address(dbmap& database,Poco::RWLock& rwl,std::string& to_find){
 //TODO: what if address is not found? //do smoe exception stuff
 	rwl.readLock();
@@ -29,16 +30,21 @@ const Poco::Net::SocketAddress Handler::find_address(dbmap& database,Poco::RWLoc
 	return addr;
 }
 
-void Handler::database_change_name(dbmap& database,Poco::RWLock& rwl,const std::string& old_name,const std::string& new_name){
-//no need to check if old_name not found
+bool Handler::database_change_name(dbmap& database,Poco::RWLock& rwl,const std::string& old_name,const std::string& new_name){
+//no need to check if old_name not found because it is sent by client who knows his old_nick
+//TODO: what if old_name has more than two words
 	rwl.readLock();
 	dbmap::iterator result=database.find(old_name);
+	dbmap::iterator is_avaible=database.find(new_name);
+	if(is_avaible!=database.end())
+		return false;
 	rwl.unlock();
 	rwl.writeLock();
 	Poco::Net::SocketAddress temp_addr=result->second;
 	database.erase(result);
 	database[new_name]=temp_addr;
 	rwl.unlock();
+	return true;
 }
 
 Poco::Net::StreamSocket Handler::get_socket(){
