@@ -6,6 +6,7 @@
 CPP_SRCS += \
 ../Get_command.cpp \
 ../Handler.cpp \
+../Message.cpp \
 ../Nick.cpp \
 ../Who.cpp \
 ../poco_server_framework.cpp 
@@ -13,6 +14,7 @@ CPP_SRCS += \
 OBJS += \
 ./Get_command.o \
 ./Handler.o \
+./Message.o \
 ./Nick.o \
 ./Who.o \
 ./poco_server_framework.o 
@@ -20,6 +22,7 @@ OBJS += \
 CPP_DEPS += \
 ./Get_command.d \
 ./Handler.d \
+./Message.d \
 ./Nick.d \
 ./Who.d \
 ./poco_server_framework.d 

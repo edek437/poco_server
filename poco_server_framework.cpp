@@ -18,6 +18,7 @@
 #include <sstream>
 #include "Who.h"
 #include "Nick.h"
+#include "Message.h"
 #include "Get_command.h"
 
 //TODO: figure out what going on and comment it
@@ -26,9 +27,12 @@ Handler *handler_factory(std::string str, Poco::Net::StreamSocket & sock) {
 	if (command == "who") {
 		return new Who(sock);
 	} else if (command == "nick") {
-		std::cout<<"Passing to nick changer: "<<str<<std::endl;
 		return new Nick(sock,str);
-	} else
+	} else if (command == "msg"){
+		std::cout<<"Looking for: "<<str<<std::endl;
+		return new Message(sock,str);
+	}
+	else
 		return NULL;
 }
 

@@ -21,7 +21,7 @@ public:
 	virtual void handle(dbmap& database,Poco::RWLock& rwl)=0;
 	bool database_change_name(dbmap& database,Poco::RWLock& rwl ,const std::string& old_name,const std::string& new_name);
 	std::string database_to_string(dbmap& database,Poco::RWLock& rwl);
-	const Poco::Net::SocketAddress find_address(dbmap& database,Poco::RWLock& rwl,std::string& to_find);
+	Poco::Net::SocketAddress find_address(dbmap& database,Poco::RWLock& rwl,std::string& to_find);
 	Poco::Net::StreamSocket get_socket();
 	virtual ~Handler() {
 	}
