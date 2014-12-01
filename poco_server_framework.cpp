@@ -14,32 +14,41 @@
 #include "Poco/RWLock.h"
 #include <iostream>
 #include <map>
+#include <vector>
 #include <string.h>
 #include <sstream>
 #include "Who.h"
 #include "Nick.h"
 #include "Message.h"
+#include "New.h"
+#include "MessageDbUp.h"
 #include "Get_command.h"
 
-//TODO: figure out what going on and comment it
-Handler *handler_factory(std::string str, Poco::Net::StreamSocket & sock) {
-	std::string command=get_command(str);
+Handler *handler_factory(std::string str, Poco::Net::StreamSocket & sock,
+		Poco::RWLock *db_rwl, Poco::RWLock *mes_rwl,
+		std::map<std::string, Poco::Net::SocketAddress> *database,
+		std::vector<std::string> *messages) {
+	std::string command = get_command(str);
 	if (command == "who") {
-		return new Who(sock);
+		return new Who(sock,database, db_rwl);
 	} else if (command == "nick") {
-		return new Nick(sock,str);
-	} else if (command == "msg"){
-		std::cout<<"Looking for: "<<str<<std::endl;
-		return new Message(sock,str);
-	}
-	else
+		return new Nick(sock, str,database,db_rwl);
+	} else if (command == "msg") {
+		std::cout << "Looking for: " << str << std::endl;
+		return new Message(sock, str,database,db_rwl);
+	} else if (command == "msg2") {
+		return new MessageDbUp(sock, str,messages,mes_rwl);
+	} else if (command == "new") {
+		return new New(sock,str,messages, mes_rwl);
+	} else
 		return NULL;
 }
 
 class MyTCPServerConnection: public Poco::Net::TCPServerConnection {
 private:
 	static Poco::RWLock db_rwlock;
-	static Poco::Mutex sr_mutex; //send/receive lock
+	static Poco::RWLock mes_rwlock;
+	static std::vector<std::string> messages;
 	static std::map<std::string, Poco::Net::SocketAddress> database;
 public:
 	MyTCPServerConnection(const Poco::Net::StreamSocket & sock) :
@@ -57,23 +66,24 @@ public:
 					sizeof(buffer) - 1); //-1 to prevent putting '\0' out of buffer range
 			buffer[rec] = '\0';
 			std::cout << "Received: " << buffer << std::endl;
-			Handler *h = handler_factory(buffer, socket());
+//TODO: make it possible to pass buffer by reference
+			Handler *h = handler_factory(buffer, socket(), &db_rwlock,
+					&mes_rwlock, &database, &messages);
 			Poco::SharedPtr<Handler> phandler(h);
 			if (h)
-//TODO: add mutex as handle parameter
-				h->handle(database, db_rwlock);
+				h->handle();
 			else { //when it's done only way to get inside else is by sending quit request from client
 				std::cout << "Ending connection" << std::endl;
 				break;
 			}
 		}
-//TODO: put receive to function and do some mutex stuff with it
 	}
 
 	~MyTCPServerConnection() {
-		std::cout << "deleting from connected users database"<<std::endl;
-		for(std::map<std::string,Poco::Net::SocketAddress>::iterator mit=database.begin();mit!=database.end();mit++){
-			if(mit->second.toString()==socket().peerAddress().toString()){
+		std::cout << "deleting from connected users database" << std::endl;
+		for (std::map<std::string, Poco::Net::SocketAddress>::iterator mit =
+				database.begin(); mit != database.end(); mit++) {
+			if (mit->second.toString() == socket().peerAddress().toString()) {
 				database.erase(mit);
 			}
 		}
@@ -82,7 +92,8 @@ public:
 };
 
 Poco::RWLock MyTCPServerConnection::db_rwlock;
-Poco::Mutex MyTCPServerConnection::sr_mutex;
+Poco::RWLock MyTCPServerConnection::mes_rwlock;
+std::vector<std::string> MyTCPServerConnection::messages;
 std::map<std::string, Poco::Net::SocketAddress> MyTCPServerConnection::database;
 
 class MyTCPServerConnectionFactory: public Poco::Net::TCPServerConnectionFactory {

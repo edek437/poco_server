@@ -7,6 +7,8 @@ CPP_SRCS += \
 ../Get_command.cpp \
 ../Handler.cpp \
 ../Message.cpp \
+../MessageDbUp.cpp \
+../New.cpp \
 ../Nick.cpp \
 ../Who.cpp \
 ../poco_server_framework.cpp 
@@ -15,6 +17,8 @@ OBJS += \
 ./Get_command.o \
 ./Handler.o \
 ./Message.o \
+./MessageDbUp.o \
+./New.o \
 ./Nick.o \
 ./Who.o \
 ./poco_server_framework.o 
@@ -23,6 +27,8 @@ CPP_DEPS += \
 ./Get_command.d \
 ./Handler.d \
 ./Message.d \
+./MessageDbUp.d \
+./New.d \
 ./Nick.d \
 ./Who.d \
 ./poco_server_framework.d 

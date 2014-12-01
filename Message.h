@@ -12,9 +12,11 @@
 
 class Message: public Handler {
 	std::string name;
+	dbmap *database;
+	Poco::RWLock *db_rwl;
 public:
-	Message(Poco::Net::StreamSocket & sock, std::string& in_name);
-	void handle(dbmap& database, Poco::RWLock& rwl);
+	Message(Poco::Net::StreamSocket & sock, std::string& in_name, dbmap *database, Poco::RWLock *rwl);
+	void handle();
 	virtual ~Message();
 };
 

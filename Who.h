@@ -11,9 +11,11 @@
 #include "Handler.h"
 
 class Who: public Handler {
+	dbmap *database;
+	Poco::RWLock  *db_rwl;
 public:
-	Who(Poco::Net::StreamSocket & sock);
-	void handle(dbmap& database,Poco::RWLock& rwl);
+	Who(Poco::Net::StreamSocket & sock,dbmap *database,Poco::RWLock *rwl);
+	void handle();
 	~Who();
 };
 

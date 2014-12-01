@@ -12,9 +12,11 @@
 
 class Nick: public Handler {
 	std::string name_data; //old and new name here
+	dbmap *database;
+	Poco::RWLock *db_rwl;
 public:
-	Nick(Poco::Net::StreamSocket & sock,std::string& in_name_data);
-	void handle(dbmap& database,Poco::RWLock& rwl);
+	Nick(Poco::Net::StreamSocket & sock,std::string& in_name_data,dbmap *database,Poco::RWLock *rwl);
+	void handle();
 	~Nick();
 };
 
