@@ -18,19 +18,20 @@ New::New(Poco::Net::StreamSocket & sock, std::string in_name,
 
 void New::handle() {
 	std::stringstream ss;
-	std::string regex=name+":(.*)";
+	std::string regex="<receiver>"+name+"</receiver><sender>(.*)</sender><message>(.*)</message>";
 	boost::regex exp(regex);
 	mes_rwl->writeLock();
 	for(std::vector<std::string>::iterator vit=vstr->begin();vit!=vstr->end();vit++){
 		if(boost::regex_match(*vit,exp)){
-			ss<<*vit<<"\n";
+			ss<<*vit;
 			vit->erase();
 		}
 	}
 	mes_rwl->unlock();
 	if(ss.str().empty()) ss<<"No messages";
+	std::string message=boost::regex_replace(ss.str(),exp,"\\1:\\2");
 //	std::cout<<"Sending from new to "<<name<<" letters: "<<ss.str().size()<<std::endl;
-	get_socket().sendBytes((char*)ss.str().c_str(),ss.str().size());
+	get_socket().sendBytes((char*)message.c_str(),message.size());
 }
 
 New::~New() {
