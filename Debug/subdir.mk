@@ -8,9 +8,12 @@ CPP_SRCS += \
 ../Handler.cpp \
 ../Message.cpp \
 ../MessageDbUp.cpp \
+../MyTCPServerConnection.cpp \
+../MyTCPServerConnectionFactory.cpp \
 ../New.cpp \
 ../Nick.cpp \
 ../Who.cpp \
+../handler_factory.cpp \
 ../poco_server_framework.cpp 
 
 OBJS += \
@@ -18,9 +21,12 @@ OBJS += \
 ./Handler.o \
 ./Message.o \
 ./MessageDbUp.o \
+./MyTCPServerConnection.o \
+./MyTCPServerConnectionFactory.o \
 ./New.o \
 ./Nick.o \
 ./Who.o \
+./handler_factory.o \
 ./poco_server_framework.o 
 
 CPP_DEPS += \
@@ -28,9 +34,12 @@ CPP_DEPS += \
 ./Handler.d \
 ./Message.d \
 ./MessageDbUp.d \
+./MyTCPServerConnection.d \
+./MyTCPServerConnectionFactory.d \
 ./New.d \
 ./Nick.d \
 ./Who.d \
+./handler_factory.d \
 ./poco_server_framework.d 
 
 
