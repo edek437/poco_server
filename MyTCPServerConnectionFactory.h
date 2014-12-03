@@ -12,6 +12,11 @@
 #include "Poco/Net/TCPServerConnectionFactory.h"
 
 class MyTCPServerConnectionFactory: public Poco::Net::TCPServerConnectionFactory {
+private:
+	Poco::RWLock db_rwlock;
+	Poco::RWLock mes_rwlock;
+	std::vector<std::string> messages;
+	std::map<std::string, Poco::Net::SocketAddress> database;
 public:
 	Poco::Net::TCPServerConnection* createConnection(
 			const Poco::Net::StreamSocket & sock);
