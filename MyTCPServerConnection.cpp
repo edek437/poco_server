@@ -11,7 +11,7 @@
 
 MyTCPServerConnection::MyTCPServerConnection(const Poco::Net::StreamSocket & sock,
 		Poco::RWLock *db_rwl, Poco::RWLock *mes_rwl,
-		std::vector<std::string> *mes,
+		std::vector<MessageStruct> *mes,
 		std::map<std::string, Poco::Net::SocketAddress> *db) :
 			Poco::Net::TCPServerConnection(sock), db_rwlock(db_rwl), mes_rwlock(mes_rwl), messages(mes), database(db) {
 		db_rwlock->writeLock();
@@ -26,7 +26,7 @@ void MyTCPServerConnection::run() {
 		char buffer[1024];
 		int rec = socket().receiveBytes((char *) buffer, sizeof(buffer) - 1); //-1 to prevent putting '\0' out of buffer range
 		buffer[rec] = '\0';
-		std::cout << "Received: " << buffer << std::endl;
+		//std::cout << "Received: " << buffer << std::endl;
 		Handler *h = handler_factory(buffer, socket(), db_rwlock, mes_rwlock,
 				database, messages);
 		Poco::SharedPtr<Handler> phandler(h);

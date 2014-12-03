@@ -8,6 +8,7 @@
 #include "Poco/Net/SocketAddress.h"
 #include "Poco/RWLock.h"
 #include "Poco/Net/StreamSocket.h"
+#include "MessageStruct.h"
 
 #ifndef HANDLER_H_
 #define HANDLER_H_

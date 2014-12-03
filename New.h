@@ -12,10 +12,10 @@
 
 class New: public Handler {
 	std::string name;
-	std::vector<std::string> *vstr;
+	std::vector<MessageStruct> *vstr;
 	Poco::RWLock *mes_rwl;
 public:
-	New(Poco::Net::StreamSocket & sock,std::string in_name, std::vector<std::string> *in_vstr, Poco::RWLock *rwl);
+	New(Poco::Net::StreamSocket & sock,std::string in_name, std::vector<MessageStruct> *in_vstr, Poco::RWLock *rwl);
 	void handle();
 	virtual ~New();
 };

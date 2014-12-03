@@ -14,11 +14,12 @@
 #include "New.h"
 #include "MessageDbUp.h"
 #include "Get_command.h"
+#include "MessageStruct.h"
 
 Handler *handler_factory(std::string str, Poco::Net::StreamSocket & sock,
 		Poco::RWLock *db_rwl, Poco::RWLock *mes_rwl,
 		std::map<std::string, Poco::Net::SocketAddress> *database,
-		std::vector<std::string> *messages);
+		std::vector<MessageStruct> *messages);
 
 
 

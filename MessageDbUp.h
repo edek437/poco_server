@@ -12,11 +12,11 @@
 
 class MessageDbUp: public Handler {
 	std::string message;
-	std::vector<std::string> *vstr;
+	std::vector<MessageStruct> *vstr;
 	Poco::RWLock *mes_rwl;
 public:
 	MessageDbUp(Poco::Net::StreamSocket& sock, std::string& message,
-			std::vector<std::string> *in_vstr, Poco::RWLock *rwl);
+			std::vector<MessageStruct> *in_vstr, Poco::RWLock *rwl);
 	void handle();
 	virtual ~MessageDbUp();
 };
